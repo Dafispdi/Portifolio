@@ -1,0 +1,13 @@
+{
+  "name": "my-portofolio",
+  "version": "1.0.0",
+  "description": "My Official Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Starting the site!'"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "author": "",
+  "license": "MIT"
+}
