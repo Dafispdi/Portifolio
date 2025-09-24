@@ -638,113 +638,121 @@ d.onclick = () => {
     pv.innerHTML = '<div class="error">Error: ' + err.message + '</div>';
   }
 }
-  // --- TikTok Downloader (robust vt.tiktok shortlink) ---
+// --- TikTok Downloader (vt + JSON apapun) ---
 async function downloadTiktok() {
-  const input = document.getElementById('tiktokUrl');
+  const input   = document.getElementById('tiktokUrl');
   const preview = document.getElementById('tiktokPreview');
-  const links = document.getElementById('tiktokLinks');
+  const links   = document.getElementById('tiktokLinks');
 
   const rawUrl = (input.value || '').trim();
-  if (!rawUrl) {
-    alert('Masukkan URL TikTok dulu. Contoh: https://vt.tiktok.com/ZSDCECaLw/');
-    return;
-  }
+  if (!rawUrl) { alert('Masukkan URL TikTok dulu. Contoh: https://vt.tiktok.com/ZSDCECaLw/'); return; }
 
-  // reset UI
   preview.innerHTML = '<div class="spinner"></div>';
   links.style.display = 'none';
   links.innerHTML = '';
 
-  // build endpoint (vt.* harus di-encode)
   const endpoint = 'https://api.siputzx.my.id/api/d/tiktok?url=' + encodeURIComponent(rawUrl);
+
+  // helper: telusuri semua value di object/array dan kumpulkan URL string
+  const collectUrls = (node, bag = []) => {
+    if (!node) return bag;
+    const t = typeof node;
+    if (t === 'string') {
+      if (/^https?:\/\//i.test(node)) bag.push(node);
+    } else if (Array.isArray(node)) {
+      node.forEach(x => collectUrls(x, bag));
+    } else if (t === 'object') {
+      Object.values(node).forEach(v => collectUrls(v, bag));
+    }
+    return bag;
+  };
+
+  // helper: bikin tombol
+  const makeBtn = (label, href, downloadName) => {
+    const d = document.createElement('div');
+    d.className = 'dl';
+    d.innerText = label;
+    d.onclick = () => {
+      // kalau bukan file langsung, buka di tab baru
+      if (!/(\.mp4|\.m3u8|\.mp3|\.m4a)(\?|$)/i.test(href)) {
+        window.open(href, '_blank', 'noopener');
+        return;
+      }
+      const a = document.createElement('a');
+      a.href = href;
+      if (downloadName) a.download = downloadName;
+      a.click();
+    };
+    return d;
+  };
 
   try {
     const resp = await fetch(endpoint, { redirect: 'follow' });
-
-    // Kadang API balas video langsung (bukan JSON)
-    const ctype = (resp.headers.get('content-type') || '').toLowerCase();
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
 
-    if (!ctype.includes('application/json')) {
-      // langsung video => tampilkan tombol open/download
-      const blob = await resp.blob();
-      const url = URL.createObjectURL(blob);
-      preview.innerHTML = '<video controls style="max-width:100%;border-radius:10px;"><source src="' + url + '" type="' + ctype + '"></video>';
+    const ctype = (resp.headers.get('content-type') || '').toLowerCase();
 
-      const d = document.createElement('div');
-      d.className = 'dl';
-      d.innerText = 'Download Video';
-      d.onclick = () => { const a = document.createElement('a'); a.href = url; a.download = 'tiktok.mp4'; a.click(); };
-      links.appendChild(d);
+    // Kalau server langsung kirim video (bukan JSON)
+    if (!ctype.includes('application/json')) {
+      const blob = await resp.blob();
+      const url  = URL.createObjectURL(blob);
+      preview.innerHTML =
+        '<video controls style="max-width:100%;border-radius:10px;"><source src="' + url + '" type="' + ctype + '"></video>';
+      links.appendChild(makeBtn('Download Video', url, 'tiktok.mp4'));
       links.style.display = 'flex';
       return;
     }
 
-    // Umumnya JSON — bentuk field bisa beda-beda
+    // JSON: parse & ekstrak
     const data = await resp.json();
 
-    // helper cari field url terbaik
-    const pick = (...cands) => cands.find(u => typeof u === 'string' && u.startsWith('http'));
-    const videoNoWM = pick(
-      data.nowm, data.no_watermark, data.hdplay, data.play,
-      data.play_url, data.url, data?.video?.no_watermark,
-      data?.result?.nowm, data?.result?.play,
-      data?.data?.nowm, data?.data?.play,
-      data?.links?.nowm, data?.download?.nowm
-    );
-    const videoWM = pick(
-      data.watermark, data?.result?.watermark, data?.data?.watermark
-    );
-    const audioUrl = pick(
-      data.audio, data.music, data?.result?.audio, data?.data?.music
-    );
+    // kumpulkan semua URL lalu seleksi kandidat video/audio
+    const allUrls = collectUrls(data);
 
-    // metadata opsional
+    // prioritas: no watermark, watermark, audio
+    const pickBy = (re) => allUrls.find(u => re.test(u));
+
+    // beberapa pola umum
+    const urlNoWM = pickBy(/(nowm|no_?watermark|hdplay|play).*|\.mp4(\?|$)/i);
+    const urlWM   = pickBy(/watermark|wm/i);
+    const urlAud  = pickBy(/\.(m4a|mp3)(\?|$)|audio|music/i);
+
+    // tampilkan meta kalau ada
     let metaHtml = '<div style="padding:12px;text-align:left;color:#dbeafe">';
-    if (data.author || data?.data?.author) metaHtml += '<b>Author:</b> ' + (data.author || data?.data?.author) + '<br>';
-    if (data.title || data?.data?.title) metaHtml += '<b>Title:</b> ' + (data.title || data?.data?.title) + '<br>';
+    const author = data.author || data?.data?.author || data?.result?.author;
+    const title  = data.title  || data?.data?.title  || data?.result?.title;
+    if (author) metaHtml += '<b>Author:</b> ' + author + '<br>';
+    if (title)  metaHtml += '<b>Title:</b> '  + title  + '<br>';
     metaHtml += '</div>';
     preview.innerHTML = metaHtml;
 
-    const makeBtn = (label, href, downloadName) => {
-      const d = document.createElement('div');
-      d.className = 'dl';
-      d.innerText = label;
-      d.onclick = () => {
-        // buka tab baru kalau bukan file langsung
-        if (!/(\.mp4|\.m4a|\.mp3)(\?|$)/i.test(href)) {
-          window.open(href, '_blank', 'noopener');
-          return;
-        }
-        const a = document.createElement('a');
-        a.href = href;
-        if (downloadName) a.download = downloadName;
-        a.click();
-      };
-      return d;
-    };
+    // tombol sesuai yang ketemu
+    if (urlNoWM) links.appendChild(makeBtn('Download (no watermark)', urlNoWM, 'tiktok_nowm.mp4'));
+    if (urlWM)   links.appendChild(makeBtn('Download (watermark)',    urlWM,   'tiktok_wm.mp4'));
+    if (urlAud)  links.appendChild(makeBtn('Download Audio',          urlAud,  'tiktok_audio.mp3'));
 
-    if (videoNoWM) links.appendChild(makeBtn('Download (no watermark)', videoNoWM, 'tiktok_nowm.mp4'));
-    if (videoWM)   links.appendChild(makeBtn('Download (watermark)', videoWM, 'tiktok_wm.mp4'));
-    if (audioUrl)  links.appendChild(makeBtn('Download Audio', audioUrl, 'tiktok_audio.mp3'));
-
+    // kalau masih belum ada apa pun, tampilkan semua URL supaya bisa dicoba manual
     if (links.childNodes.length === 0) {
-      // tampilkan raw JSON buat debugging kalau tak ada field yang ketemu
-      preview.innerHTML += '<div class="small" style="margin-top:10px;color:#ffc">Tidak menemukan link download di response API.</div>' +
-                           '<pre style="white-space:pre-wrap;background:#08121a;padding:10px;border-radius:8px;max-height:280px;overflow:auto;">' +
-                           JSON.stringify(data, null, 2) + '</pre>';
+      // tampilkan sebagian URL berguna (filter duplikat & domain umum)
+      const uniq = Array.from(new Set(allUrls))
+        .filter(u => /(tiktokcdn|tiktok|akamai|bytecdn|muscdn|cdn|\.mp4|\.m3u8|\.mp3|\.m4a)/i.test(u));
+
+      preview.innerHTML +=
+        '<div class="small" style="margin-top:10px;color:#ffc">Tidak menemukan field standar. Coba klik salah satu URL di bawah:</div>' +
+        '<div style="margin-top:8px;display:flex;flex-direction:column;gap:8px;max-height:260px;overflow:auto;">' +
+          uniq.map((u,i)=>`<a href="${u}" target="_blank" rel="noopener" style="color:#90e0ff;word-break:break-all;">Link ${i+1}</a>`).join('') +
+        '</div>';
     } else {
       links.style.display = 'flex';
     }
 
   } catch (err) {
     const msg = String(err).includes('Failed to fetch')
-      ? 'Failed to fetch (kemungkinan CORS). Coba jalankan dari server/proxy.'
+      ? 'Failed to fetch (kemungkinan CORS). Coba jalankan dari server/hosting, bukan file lokal.'
       : err.message;
     preview.innerHTML = '<div class="error">Error: ' + msg + '</div>';
   }
-}
-
+	}
   // --- Skiplink / Bypass ---
   async function bypassLink(){
     const url=document.getElementById('skipUrl').value.trim();
@@ -835,4 +843,5 @@ document.addEventListener('click', (e) => {
 </body>
 
 </html>
+
 
