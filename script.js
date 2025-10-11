@@ -644,7 +644,7 @@ async function sendToCS() {
 
   // Ganti sesuai token bot kamu & chat_id owner (Kyxsancs)
   const botToken = '8172638185:AAFSBgiRQqTf0XZdEfr1ksL7tYZFT2KektU';
-  const chatId = '107034005'; // bisa juga diganti dengan ID numerik user
+  const chatId = 107034005; // bisa juga diganti dengan ID numerik user
 
   const text = `📩 *Pesan Baru dari Website*\n👤 Nama: ${name}\n💬 Pesan: ${message}`;
 
@@ -789,3 +789,4 @@ showSection('imagine');
 setInterval(updateCooldownDisplay, 60000);
 
 updateCooldownDisplay();
+
