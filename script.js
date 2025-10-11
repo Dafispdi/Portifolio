@@ -631,12 +631,13 @@ document.addEventListener('click', (e) => {
   setTimeout(() => ripple.remove(), 650);
 });
 // ===== GACHA REWARDS (ambil langsung dari folder /assets) =====
+// ===== GACHA REWARDS (ambil langsung dari folder /assets) =====
 const GACHA_REWARDS = [
   { type: 'file', value: 'assets/freezeAnjay.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien AMPOS Selamat Yah wak 😂🤣!' },
   { type: 'file', value: 'assets/delayMengsion.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien Delay beta Selamat Yah wak 😆!!' },
   { type: 'file', value: 'assets/ios.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien Crash Ipong Selamat Yah wak 😆!!' },
   { type: 'file', value: 'assets/CrashBeta.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien CraSh Beta Selamat Yah wak 😆!!' },
-  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }
+  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' },
   { type: 'file', value: 'assets/crash invis.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien CraSh invis Selamat Yah wak 😆!!' },
   { type: 'file', value: 'assets/StickerInvisible.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien delay Kuras Kouta Selamat Yah wak 😆!!' },
   { type: 'file', value: 'assets/Cresh.js', name: 'FangsienBySaturn.js', desc: '🎁 Fangsien Crash Selamat Yah wak 😆!!' },
@@ -648,13 +649,12 @@ const GACHA_REWARDS = [
   { type: 'file', value: 'assets/ucapan.pdf', name: 'BaseTele.zip', desc: '💤 Base bug via Telegram Selamat Yah wak 😅!!' },
   { type: 'file', value: 'assets/ucapan.pdf', name: 'toolsDdos.zip', desc: '🎉 Script ddos v1 Via Panel VVIP Selamat yah wak 😆!!' },
   { type: 'file', value: 'assets/mystery.jpg', name: 'mystery.jpg', desc: '⚡ Coba Lihatt Inii hadiah sangatt Vvip!!!!!.' },
-  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }, 
-  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }, 
-  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }, 
-  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }, 
+  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' },
+  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' },
+  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' },
+  { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' },
   { type: 'text', value: '😅 Zonk! Coba lagi ya — keberuntungan belum berpihak kali ini.' }
 ];
-
 // ===== GACHA SYSTEM =====
 const SPIN_COOLDOWN_HOURS = 10;
 const STORAGE_KEY = 'lastGachaSpinTime';
@@ -742,4 +742,5 @@ function updateCooldownDisplay() {
 }
 
 setInterval(updateCooldownDisplay, 60000);
+
 updateCooldownDisplay();
