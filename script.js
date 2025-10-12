@@ -829,16 +829,13 @@ function getToastIcon(type) {
   }
 }
 
-// --- Get Code Website (FikMyDomainsz API) ---
+// --- Get Code Website (robust) ---
 async function getWebsiteCode() {
   const url = document.getElementById('codeUrl').value.trim();
   const pv = document.getElementById('codePreview');
   const lk = document.getElementById('codeLinks');
 
-  if (!url) {
-    showToast('⚠️ Masukkan URL dulu!', 'warning');
-    return;
-  }
+  if (!url) { showToast('⚠️ Masukkan URL dulu!', 'warning'); return; }
 
   pv.innerHTML = '<div class="spinner"></div>';
   lk.style.display = 'none';
@@ -849,12 +846,30 @@ async function getWebsiteCode() {
     const resp = await fetch(api);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
 
-    const data = await resp.json();
-    const code = data.code || data.result || data.html || data.output || '';
+    const ct = (resp.headers.get('content-type') || '').toLowerCase();
 
-    if (!code) throw new Error('Tidak menemukan HTML di Web Tersebut.');
+    // 1) Kalau API balas text/html atau text/plain → ambil sebagai text
+    // 2) Kalau application/json → parse dan ambil field yang tepat
+    let raw;
+    if (ct.includes('application/json')) {
+      const data = await resp.json();
+      raw = data.code ?? data.result ?? data.html ?? data.output ?? data.data ?? data.body ?? '';
+    } else {
+      raw = await resp.text();
+    }
 
-    // tampilkan hasil
+    // Pastikan string
+    let codeStr;
+    if (typeof raw === 'string') {
+      codeStr = raw;
+    } else if (raw == null) {
+      throw new Error('Response kosong dari API.');
+    } else {
+      // fallback stringify kalau objek/array
+      codeStr = JSON.stringify(raw, null, 2);
+    }
+
+    // Tampilkan rapi
     pv.innerHTML = `
       <div style="
         background: rgba(0,0,0,0.3);
@@ -869,27 +884,27 @@ async function getWebsiteCode() {
         font-size: 0.85rem;
         color: #e2e8f0;
       ">
-        ${escapeHtml(code)}
+        ${escapeHtml(codeStr)}
       </div>
     `;
 
-    // tombol copy & download
+    // Aksi: copy & download
     const copyBtn = document.createElement('div');
     copyBtn.className = 'dl';
     copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Copy Code';
     copyBtn.onclick = () => {
-      navigator.clipboard.writeText(code);
+      navigator.clipboard.writeText(codeStr);
       showToast('✅ Code berhasil disalin!', 'success');
     };
 
     const dlBtn = document.createElement('div');
     dlBtn.className = 'dl';
-    dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> HasilKyxzanTzy.html';
+    dlBtn.innerHTML = '<i class="fa-solid fa-download"></i> Download.html';
     dlBtn.onclick = () => {
-      const blob = new Blob([code], { type: 'text/html' });
+      const blob = new Blob([codeStr], { type: 'text/html' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'SaturnXGetcode.html';
+      a.download = 'KyxzanGetcode.html';
       a.click();
     };
 
@@ -901,8 +916,9 @@ async function getWebsiteCode() {
   }
 }
 
-// helper untuk tampilkan kode HTML aman
-function escapeHtml(str) {
+// helper tampilkan HTML aman (tahan non-string juga)
+function escapeHtml(input) {
+  const str = String(input);
   return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
