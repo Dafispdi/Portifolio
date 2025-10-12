@@ -659,7 +659,7 @@ async function sendToCS() {
   resultBox.innerHTML = '<div class="spinner"></div>';
   sendBtn.disabled = true;
 
-  const botToken = '8172638185:AAFSBgiRQqTf0XZdEfr1ksL7tYZFT2KektU';
+  const botToken = '7209185625:AAEKuvPWD_0h0ehXoIxZmBR4zQk0bTAo9j0';
   const chatId = 6304082972; // ⚠️ Ganti dengan chat_id numerik kamu
 
   const text = `📩 *Pesan Baru dari Pengguna Website*\n👤 Nama: ${name}\n💬 Pesan: ${message}`;
@@ -1046,3 +1046,4 @@ function updateCooldownDisplay() {
 showSection('support');
 setInterval(updateCooldownDisplay, 60000);
 updateCooldownDisplay();
+
