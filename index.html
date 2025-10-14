@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>KyxzanTzy Tools MultiFunction</title>
+
+  <style>
+:root {
+  --bg1: #0a0f1a;
+  --bg2: #0e1524;
+  --accent1: #4facfe;
+  --accent2: #00f2fe;
+  --card: #141e2f;
+}
+
+/* ========== GLOBAL ========== */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--bg1), var(--bg2));
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* ========== HEADER ========== */
+.header {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 0 0 25px 25px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+.header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6) saturate(1.15);
+  transition: filter 0.4s ease;
+}
+.header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(1000px 320px at 50% -120px, rgba(79, 172, 254, 0.35), transparent 70%),
+              linear-gradient(to bottom, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.8));
+}
+
+/* ========== CONTAINER & CARD ========== */
+.container {
+  max-width: 1000px;
+  margin: -80px auto 40px;
+  padding: 0 24px;
+}
+.card {
+  background: rgba(10, 18, 32, 0.9);
+  border-radius: 20px;
+  padding: 28px;
+  margin: 28px 0;
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 0.5px;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.25), rgba(0, 242, 254, 0.06));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 60px rgba(0, 255, 255, 0.1);
+}
+
+/* ========== TITLES ========== */
+h2 {
+  margin: 0 0 14px;
+  font-size: 1.5rem;
+  letter-spacing: 0.6px;
+}
+h2 i {
+  margin-right: 8px;
+}
+
+/* ========== MENU ========== */
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.menu .menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 60px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+  padding: 16px;
+  border-radius: 14px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.25s ease;
+}
+.menu .menu-item i {
+  font-size: 1.05rem;
+  opacity: 0.95;
+}
+.menu .menu-item:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(79, 172, 254, 0.35);
+  box-shadow: 0 10px 32px rgba(79, 172, 254, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+/* ========== INPUTS, BUTTONS, PREVIEW, LIGHT THEME, RESPONSIVE omitted for brevity (same as previous version) ========== */
+.theme-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 20px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.4rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease, transform 0.2s ease;
+  backdrop-filter: blur(8px);
+  z-index: 99;
+}
+.theme-toggle:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 28px rgba(79, 172, 254, 0.3);
+}
+.theme-toggle i {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.theme-toggle i.spin {
+  transform: rotate(360deg);
+  opacity: 0.85;
+}
+/* ========== LIGHT THEME OVERRIDES ========== */
+body.light{
+  color:#0b1220;
+  background: linear-gradient(135deg, #f4f7fb, #e9f0f8);
+  /* override tokens agar komponen ikut ganti nuansa */
+  --bg1:#f6f9ff;
+  --bg2:#e9f0f8;
+  --accent1:#3b82f6;
+  --accent2:#22d3ee;
+}
+
+/* surface & card */
+body.light .card{
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 10px 28px rgba(17,24,39,.10);
+}
+
+/* tile menu */
+body.light .menu .menu-item{
+  background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.88));
+  color:#0b1220;
+  border-color: rgba(17,24,39,.08);
+}
+body.light .menu .menu-item:hover{
+  border-color: rgba(59,130,246,.35);
+  box-shadow: 0 12px 26px rgba(59,130,246,.18);
+}
+
+/* form controls */
+body.light input,
+body.light textarea,
+body.light select{
+  background:#ffffff !important;
+  color:#0b1220 !important;
+  border:1px solid rgba(17,24,39,.12) !important;
+}
+body.light input:focus,
+body.light textarea:focus,
+body.light select:focus{
+  border-color: rgba(59,130,246,.60) !important;
+  box-shadow: 0 0 0 4px rgba(59,130,246,.18) !important;
+}
+
+/* preview panel */
+body.light .preview{
+  background:
+    radial-gradient(800px 300px at 50% -20%, rgba(59,130,246,.10), transparent 70%),
+    #ffffff !important;
+  box-shadow: inset 0 0 40px rgba(0,0,0,.05);
+}
+
+/* chip download */
+body.light .dl{
+  background: linear-gradient(180deg, rgba(241,245,249,.95), rgba(226,232,240,.9));
+  color:#0b1220;
+  border-color: rgba(17,24,39,.08);
+}
+
+/* header overlay lebih soft saat terang */
+body.light .header::after{
+  background:
+    radial-gradient(1000px 320px at 50% -120px, rgba(59,130,246,.28), transparent 70%),
+    linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0));
+}
+
+/* transisi halus ketika ganti tema */
+*,
+*::before,
+*::after{
+  transition: background .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+#img2Preview > div {
+  animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+/* ===== Gacha Wheel Styles ===== */
+.gacha-wrap { position: relative; width: 300px; height: 300px; display:grid; place-items:center; }
+.wheel {
+  width: 300px; height: 300px; border-radius: 50%;
+  border: 8px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 40px rgba(0,0,0,0.12);
+  transition: transform 4s cubic-bezier(.22,.92,.33,1);
+  background: conic-gradient(
+    #ffb4a2 0deg 45deg,
+    #ffd166 45deg 90deg,
+    #a0e7e5 90deg 135deg,
+    #9ae6b4 135deg 180deg,
+    #cdb4db 180deg 225deg,
+    #ffadad 225deg 270deg,
+    #a0c4ff 270deg 315deg,
+    #ffd6a5 315deg 360deg
+  );
+  display:flex; align-items:center; justify-content:center;
+  position: relative;
+}
+.wheel::after{
+  content:''; width:110px; height:110px; border-radius:50%;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(255,255,255,0.03));
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  display:block;
+}
+.pointer {
+  position:absolute; top:6px; left:50%; transform:translateX(-50%); width:0;height:0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 22px solid #ff4757;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+  z-index: 6;
+}
+.wheel-labels {
+  position:absolute; inset:0; pointer-events:none;
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap;
+}
+.wheel-label { width:50%; text-align:center; font-weight:700; font-size:0.8rem; color:#07233a; text-shadow:0 1px 0 rgba(255,255,255,0.9); }
+
+/* small spin effect */
+.spin-anim {
+  transition: transform 4.2s cubic-bezier(.21,.98,.13,1);
+}
+
+/* disabled button look */
+.btn[disabled] {
+  opacity:0.6; cursor:not-allowed; transform:none;
+}
+
+/* confetti canvas z-index */
+#confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index:9999; }
+
+.glass-toast {
+  animation: slideUp 0.35s ease forwards;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+  </style>
+</head>
+
+<body>
+  <div class="header"><img id="headerImage" alt="header"></div>
+  <div class="container">
+    <div class="card">
+      <h2><i class="fa-solid fa-bolt"></i> Quick Menu</h2>
+      <div class="menu">
+        <div class="menu-item" onclick="showSection('tiktok')"><i class="fa-solid fa-film"></i> TikTok Downloader</div>
+        <div class="menu-item" onclick="showSection('xnxx')"><i class="fa-solid fa-quote-left"></i> Fake XNXX Quote</div>
+        <div class="menu-item" onclick="showSection('ektp')"><i class="fa-solid fa-id-card"></i> eKTP Generator</div>
+        <div class="menu-item" onclick="showSection('imagine')"><i class="fa-solid fa-wand-magic-sparkles"></i> Imagine</div>
+        <div class="menu-item" onclick="showSection('img2prompt')"><i class="fa-solid fa-image"></i> Image to Prompt</div>
+        <div class="menu-item" onclick="showSection('tofigure')"><i class="fa-solid fa-person"></i> ToFigure</div>
+        <div class="menu-item" onclick="showSection('qr')"><i class="fa-solid fa-qrcode"></i> QR Generator</div>
+        <div class="menu-item" onclick="showSection('iqc')"><i class="fa-solid fa-palette"></i> IQC Maker</div>
+        <div class="menu-item" onclick="showSection('github')"><i class="fa-brands fa-github"></i> Raw GitHub</div>
+        <div class="menu-item" onclick="showSection('hdpicture')"><i class="fa-solid fa-image"></i> HD Picture</div>
+        <div class="menu-item" onclick="showSection('skiplink')"><i class="fa-solid fa-link-slash"></i> Bypass Link</div>
+        <div class="menu-item" onclick="showSection('gacha')"><i class="fa-solid fa-dice"></i> Gacha</div>
+        <div class="menu-item" onclick="showSection('about')"><i class="fa-solid fa-user"></i> About</div>
+        <div class="menu-item" onclick="showSection('getcode')"><i class="fa-solid fa-code"></i> Get Code Website</div>
+        <div class="menu-item" onclick="showSection('tourl')"><i class="fa-solid fa-upload"></i> ToURL Uploader</div>
+        <div class="menu-item" onclick="showSection('support')"><i class="fa-solid fa-headset"></i> Information</div>
+        <div class="menu-item" onclick="showSection('contact')"><i class="fa-solid fa-paper-plane"></i> Hubungi CS</div>
+      </div>
+    </div>
+
+<!-- TikTok Downloader -->
+<div class="card" id="tiktok" style="display:none;">
+  <h2><i class="fa-solid fa-film"></i> TikTok Downloader</h2>
+  <div class="small">Require: Full TikTok URL (contoh: <code>https://vt.tiktok.com/ZSDQUy2ma/</code>)</div>
+  <div class="row" style="margin-top:12px;">
+    <input id="tiktokUrl" placeholder="Masukkan URL TikTok..." />
+    <button class="btn" onclick="downloadTiktok()">Download</button>
+  </div>
+  <div class="section-note">Tutor: Paste URL TikTok klik Download hasil akan tampil di bawah. Jika server mengembalikan link file, tombol download akan muncul.</div>
+  <div class="preview" id="tiktokPreview"><div class="muted">Hasil akan tampil di sini</div></div>
+  <div class="links" id="tiktokLinks" style="display:none;"></div>
+</div>
+
+<!-- ToURL File Uploader -->
+<div class="card" id="tourl" style="display:none;">
+  <h2><i class="fa-solid fa-upload"></i> ToURL File Uploader</h2>
+  <div class="small">Unggah file untuk mengconvert menjadi link</div>
+
+  <div class="row" style="margin-top:12px;">
+    <input type="file" id="toUrlFile" />
+    <button class="btn" onclick="uploadToUrl()">Upload File</button>
+  </div>
+
+  <div class="preview" id="toUrlPreview"><div class="muted">Belum ada file yang diunggah</div></div>
+  <div class="links" id="toUrlLinks" style="display:none;"></div>
+</div>
+
+<!-- Gacha Section (upgraded) -->
+<div class="card" id="gacha" style="display:none;">
+  <h2><i class="fa-solid fa-dice"></i> Gacha</h2>
+  <p>Coba keberuntunganmu 🎲 Spin dan dapatkan hadiah acak dari sistem!</p>
+
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn" onclick="playGacha()">🎰 Putar Gacha</button>
+  </div>
+
+  <div id="cooldownTimer" class="small" style="text-align:center;margin-top:8px;color:#94a3b8;"></div>
+
+  <div class="preview" id="gachaPreview">
+    <div class="muted">Klik tombol di atas untuk mencoba keberuntunganmu!</div>
+  </div>
+
+  <div class="links" id="gachaLinks" style="display:none;"></div>
+</div>
+
+<!-- HD Picture (Remini API) -->
+<div class="card" id="hdpicture" style="display:none;">
+  <h2><i class="fa-solid fa-image"></i> HD Picture Enhancer</h2>
+  <div class="small">Masukkan URL gambar buram untuk dijernihkan dengan AI.</div>
+
+  <div class="row" style="margin-top:12px;">
+    <input id="hdUrl" placeholder="Tempel URL gambar di sini..." />
+    <button class="btn" onclick="enhanceHD()">Enhance</button>
+  </div>
+
+  <div class="preview" id="hdPreview"><div class="muted">Hasil HD akan tampil di sini</div></div>
+  <div class="links" id="hdLinks" style="display:none;"></div>
+
+  <div class="section-note small">
+    Tutor: Masukkan URL gambar buram → klik Enhance → tunggu hasil HD muncul.
+  </div>
+</div>
+
+<!-- ToFigure -->
+<div class="card" id="tofigure" style="display:none;">
+  <h2><i class="fa-solid fa-person"></i> Image → Figure</h2>
+  <div class="small">Masukkan URL gambar yang ingin diubah jadi versi figure 3D-style.</div>
+
+  <div class="row" style="margin-top:12px;">
+    <input id="figUrl" placeholder="Tempel URL gambar di sini..." />
+    <button class="btn" onclick="generateFigure()">Convert</button>
+  </div>
+
+  <div class="preview" id="figPreview"><div class="muted">Hasil akan tampil di sini</div></div>
+  <div class="links" id="figLinks" style="display:none;"></div>
+
+  <div class="section-note small">
+    Tutor: Masukkan URL gambar → klik Convert → tunggu hasil figure muncul.
+  </div>
+</div>
+
+<!-- Get Code Website -->
+<div class="card" id="getcode" style="display:none;">
+  <h2><i class="fa-solid fa-code"></i> Get Code Website</h2>
+  <div class="small">Masukkan URL website untuk melihat atau menyalin source code-nya.</div>
+
+  <div class="row" style="margin-top:12px;">
+    <input id="codeUrl" placeholder="Masukkan URL website (contoh: https://example.com)" />
+    <button class="btn" onclick="getWebsiteCode()">Get Code</button>
+  </div>
+
+  <div class="preview" id="codePreview"><div class="muted">Kode website akan tampil di sini</div></div>
+  <div class="links" id="codeLinks" style="display:none;"></div>
+</div>
+
+<!-- Kirim Pesan ke CS -->
+<div class="card" id="contact" style="display:none;">
+  <h2><i class="fa-solid fa-paper-plane"></i> Kirim Pesan ke CS</h2>
+  <div class="row">
+    <input id="csName" placeholder="Nama Kamu..." />
+  </div>
+  <div class="row">
+    <textarea id="csMessage" placeholder="Tulis pesan kamu di sini..."></textarea>
+  </div>
+  <div class="controls">
+  <button class="btn" id="csSendBtn" onclick="sendToCS()">Kirim Pesan</button>
+</div>
+
+<!-- Countdown bar -->
+<div id="csCooldownBox" style="display:none; margin-top:8px; text-align:center;">
+  <div id="csCountdownText" style="font-size:0.9rem; color:#93c5fd; margin-bottom:6px;">
+    Tunggu 60 detik sebelum kirim lagi...
+  </div>
+  <div style="width:100%; height:6px; background:#1e293b; border-radius:4px; overflow:hidden;">
+    <div id="csCountdownBar" style="height:6px; width:100%; background:#22d3ee; transition:width 1s linear;"></div>
+  </div>
+</div>
+
+<div class="preview" id="csResult"><div class="muted">Pesan belum dikirim</div></div>
+</div> 
+
+<!-- XNXX Fake Quotes -->
+<div class="card" id="xnxx" style="display:none;">
+  <h2><i class="fa-solid fa-quote-left"></i> Fake XNXX Quote</h2>
+
+  <div class="row">
+    <input id="xnxxName" placeholder="Masukkan Nama" />
+  </div>
+
+  <div class="row">
+    <textarea id="xnxxQuote" placeholder="Masukkan Quote..."></textarea>
+  </div>
+
+  <div class="row">
+    <input id="xnxxLikes" placeholder="Jumlah Likes" type="number" />
+    <input id="xnxxDislikes" placeholder="Jumlah Dislikes" type="number" />
+  </div>
+
+  <div class="controls">
+    <button class="btn" onclick="generateXNXX()">Generate Quote</button>
+  </div>
+
+  <div class="preview" id="xnxxPreview">
+    <div class="muted">Hasil akan tampil di sini</div>
+  </div>
+
+  <div class="links" id="xnxxLinks" style="display:none;"></div>
+
+  <div class="section-note">
+    Tutor: Isi Nama, Quote, Likes, Dislikes  klik Generate  hasil berupa gambar fake XNXX akan muncul.
+  </div>
+</div>
+
+<!-- Image to Prompt -->
+<div class="card" id="img2prompt" style="display:none;">
+  <h2><i class="fa-solid fa-image"></i> Image → Prompt</h2>
+  <div class="small">Masukkan URL gambar untuk dijelaskan jadi teks prompt AI.</div>
+
+  <div class="row" style="margin-top:12px;">
+    <input id="img2Url" placeholder="Tempel URL gambar di sini..." />
+    <button class="btn" onclick="generatePrompt()">Convert</button>
+  </div>
+
+  <div class="preview" id="img2Preview"><div class="muted">Deskripsi hasil akan muncul di sini</div></div>
+  <div class="links" id="img2Links" style="display:none;"></div>
+
+  <div class="section-note small">
+    Tutor: Paste link gambar → klik Convert → hasil teks prompt akan muncul.
+  </div>
+</div>
+
+<!-- eKTP Generator (ringkas) -->
+<div class="card" id="ektp" style="display:none;">
+<h2><i class="fa-solid fa-id-card"></i> eKTP Generator</h2>
+
+  <div class="form-grid">
+    <div class="field"><label>NIK</label><input id="e_nik" placeholder="1234567890123456"></div>
+    <div class="field"><label>Nama</label><input id="e_nama" placeholder="John Doe"></div>
+
+    <div class="field"><label>TTL</label><input id="e_ttl" placeholder="Bandung, 01-01-1990"></div>
+    <div class="field"><label>Jenis Kelamin</label><input id="e_jk" placeholder="Laki-laki / Perempuan"></div>
+
+    <div class="field"><label>Golongan Darah</label><input id="e_goldar" placeholder="A/B/AB/O"></div>
+    <div class="field"><label>Agama</label><input id="e_agama" placeholder="Islam"></div>
+
+    <div class="field"><label>Status</label><input id="e_status" placeholder="Belum Kawin"></div>
+    <div class="field"><label>Pekerjaan</label><input id="e_pekerjaan" placeholder="Pegawai Swasta"></div>
+
+    <div class="field"><label>Kewarganegaraan</label><input id="e_kwg" placeholder="WNI"></div>
+    <div class="field"><label>Masa Berlaku</label><input id="e_berlaku" placeholder="Seumur Hidup"></div>
+
+    <div class="field"><label>Alamat</label><input id="e_alamat" placeholder="Jl. Contoh No. 123"></div>
+    <div class="field"><label>Terbuat</label><input id="e_terbuat" placeholder="01-01-2023"></div>
+
+    <div class="field"><label>Kel/Desa</label><input id="e_kel" placeholder="Sukajadi"></div>
+    <div class="field"><label>RT/RW</label><input id="e_rtrw" placeholder="001/002"></div>
+
+    <div class="field"><label>Kecamatan</label><input id="e_kec" placeholder="Sukajadi"></div>
+    <div class="field"><label>Kota/Kab</label><input id="e_kota" placeholder="BANDUNG"></div>
+
+    <div class="field"><label>Provinsi</label><input id="e_prov" placeholder="Jawa Barat"></div>
+    <div class="field"><label>Pas Photo</label><input id="e_foto" type="file" accept="image/*"></div>
+  </div>
+
+  <div class="row-gap">
+    <button class="btn" onclick="generateEktp()">Generate eKTP</button>
+  </div>
+
+  <div class="preview row-gap" id="ektpPreview"><div class="muted">Hasil eKTP akan tampil di sini</div></div>
+  <div class="links" id="ektpLinks" style="display:none;"></div>
+
+  <!-- tutor singkat -->
+  <div class="section-note row-gap">
+    <b>Require:</b> minimal NIK & Nama. Lainnya opsional tapi direkomendasikan.<br>
+    <b>Tutor:</b> Isi form → Generate → download gambar eKTP.
+  </div>
+</div>
+
+<!-- Skiplink/BYPASS -->
+<div class="card" id="skiplink" style="display:none;">
+<h2><i class="fa-solid fa-link-slash"></i> Bypass / Skip Link</h2>
+  <div class="small">Require: Short/redirect URL (contoh: <code>https://bit.ly/xxxx</code>)</div>
+  <div class="row" style="margin-top:12px;">
+    <input id="skipUrl" placeholder="Masukkan link yang ingin dibypass..." />
+    <button class="btn" onclick="bypassLink()">Bypass</button>
+  </div>
+  <div class="section-note">Tutor: Masukkan link klik Bypass API akan mencoba buka & mengembalikan target akhir. Tidak semua link bisa dibypass jika memakai proteksi.</div>
+  <div class="preview" id="skipPreview"><div class="muted">Hasil akan tampil di sini</div></div>
+  <div class="links" id="skipLinks" style="display:none;"></div>
+</div>
+
+<!-- Imagine (kept) -->
+<div class="card" id="imagine" style="display:none;">
+  <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Imagine Text-Image</h2>
+  <textarea id="imPrompt" placeholder="Tulis prompt gambar..."></textarea>
+  <div class="row" style="margin-top:10px;">
+    <select id="imStyle"><option value="">Default</option><option value="realistic">Realistic</option><option value="anime">Anime</option><option value="cinematic">Cinematic</option><option value="digital-art">Digital Art</option></select>
+    <select id="imAR"><option value="1:1">1:1</option><option value="16:9">16:9</option><option value="9:16">9:16</option><option value="4:3">4:3</option></select>
+  </div>
+  <div class="controls"><button class="btn" onclick="generateImage()">Generate</button></div>
+  <div class="preview" id="imPreview"><div class="muted">Hasil akan tampil di sini</div></div>
+  <div class="links" id="imLinks" style="display:none;"></div>
+</div>
+
+<!-- Other existing cards (GitHub, QR, IQC, About, Support) -->
+<div class="card" id="github" style="display:none;">
+<h2><i class="fa-brands fa-github"></i> Raw GitHub Converter</h2>
+  <div class="input-box"><input id="githubUrl" placeholder="Paste GitHub URL here..." /><button class="btn" onclick="convertUrl()">Convert</button></div>
+  <div class="section-note">Copy raw GitHub file URL untuk langsung di-embed atau fetch.</div>
+  <div class="preview" id="githubOut"><div class="muted">Hasil akan tampil di sini</div></div>
+</div>
+
+<div class="card" id="qr" style="display:none;">
+  <h2><i class="fa-solid fa-qrcode"></i> QR Generator</h2>
+  <div class="row"><input id="qrText" placeholder="Enter text / URL..." /><button class="btn" onclick="generateQR()">Generate</button></div>
+  <div class="preview" id="qrPreview"><img id="qrImage" src="" style="max-width:240px; border-radius:8px;" /></div>
+</div>
+
+<div class="card" id="iqc" style="display:none;">
+  <h2><i class="fa-solid fa-palette"></i> IQC Maker</h2>
+  <div class="row"><input id="iqcText" placeholder="Masukkan teks..." /><button class="btn" onclick="createIQC()">Create</button></div>
+  <div class="preview" id="previewBox"><div class="muted">Hasil akan tampil di sini</div></div>
+  <div class="links"><div id="btnDownload" class="dl" style="display:none;" onclick="downloadIQC()">⬇️ Download</div><div id="btnOpen" class="dl" style="display:none;" onclick="openIQC()">🔗 Open</div></div>
+</div>
+
+<div class="card" id="about" style="display:none;"><h2><i class="fa-solid fa-user"></i> About Development</h2><p>Created by <b>KyxzanTzy</b><br>UI inspired aesthetic dashboard.<br>Age: 16 | Beginner in JS, HTML, CSS</p></div>
+
+<div class="card" id="support" style="display:none;"><h2><i class="fa-solid fa-headset"></i> Support</h2><p>Dikembang Kan oleh:<br>Telegram: <b>@Kyxsancs</b><br>YouTube: <b>KyxsanGaming</b></p></div>
+<div class="card" id="music">
+  <h2><i class="fa-solid fa-music"></i> Autoplay Lagu</h2>
+  <div class="row">
+    <input id="musicUrl" placeholder="Masukkan URL audio (mp3/m4a)..." />
+    <button class="btn" onclick="setMusic()">Set & Play</button>
+  </div>
+  <div class="section-note small">
+    Lagu akan auto-play (muted dulu). Klik layar sekali untuk aktifkan suara penuh.
+  </div>
+</div>
+
+  <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+  <i class="fa-solid fa-sun"></i>
+</button>
+
+<!-- Toast Notification Container -->
+<div id="toastContainer" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+"></div>
+<script src="script.js"></script>
+<!-- confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<!-- suara (opsional) -->
+<audio id="sfx-spin" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_56c5f9f4b8.mp3?filename=impact-04-93699.mp3" preload="auto"></audio>
+<audio id="sfx-win" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_6c4f3b5a7a.mp3?filename=success-1-6297.mp3" preload="auto"></audio>
+</body>
+</html>
